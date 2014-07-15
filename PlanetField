@@ -1,0 +1,36 @@
+public class PlanetField{
+  ArrayList<Planet> planets=new ArrayList<Planet>();
+  private PImage planetImages[]=new PImage[Planet.NUM_TYPES];
+  private int onType=0;
+  public PlanetField(){
+    planetImages[0]=loadImage("assets/planet1b.png");
+    planetImages[0].resize(50,0);
+    planetImages[1]=loadImage("assets/planet2b.png");
+    planetImages[1].resize(50,0);
+    planetImages[2]=loadImage("assets/planet3.png");
+    planetImages[2].resize(50,0);
+    planetImages[3]=loadImage("assets/planet4c.png");
+    planetImages[3].resize(50,0);
+  }
+  public void draw(){
+    addPlanets();
+    for(int i=0;i<planets.size();i++){
+      Planet p=planets.get(i);
+      p.increment();
+      pushMatrix();
+      PImage temp=planetImages[p.type];
+      translate(p.x,p.y);
+      scale(p.z/10,p.z/10);
+      image(temp,-temp.width/2,temp.height/2);
+      
+      
+      popMatrix();
+      if(planets.get(i).outsideScreen())planets.remove(i--);
+    }
+  }
+  private void addPlanets(){
+    if((int)random(150)!=0)return;
+    planets.add(new Planet(width,random(height),max(1.0f,random(5)),onType));
+    if(++onType>=Planet.NUM_TYPES)onType=0;
+  }
+}
