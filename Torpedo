@@ -1,0 +1,16 @@
+public class Torpedo implements BoxObject{
+  public static final long DELAY=600L;
+  public static final float INCREMENT=10.0;
+  private float x,y;
+  public Torpedo(float x,float y){
+    this.x=x;
+    this.y=y;
+  }
+  @Override
+  public Rect getRect(){return new Rect(x,y-60,x+120,y+60);}
+  public boolean outsideScreen(){return x>width;}
+  public void incrementX(){this.x+=INCREMENT;}
+  public void incrementY(){this.y+=INCREMENT;}
+  public float getX(){return x;}
+  public float getY(){return y;}
+}
