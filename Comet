@@ -1,0 +1,32 @@
+public class Comet implements BoxObject{
+  private float x,y;
+  private float angle;
+  private PImage comet;
+  public Comet(){
+    comet=loadImage("assets/asteroid1b.png");
+    comet.resize(50,0);
+    x=width+comet.width/2;
+    y=random(height);
+    angle=0.0;
+  }
+  public void draw(){
+    angle+=0.1;
+    x-=5.0;
+    if(x<-comet.width/2){
+      x=width+comet.width/2;
+      y=random(height);
+    }
+    //fill(0xCC00FF00);
+    //rect(x-comet.width/2,y-comet.height/2,comet.width,comet.height);
+    pushMatrix();
+    translate(x,y);
+    rotate(angle);
+    image(comet,-comet.width/2,-comet.height/2);
+    popMatrix();
+    
+  }
+  @Override
+  public Rect getRect(){return new Rect(x-comet.width/2,y-comet.height/2,x+comet.width/2,y+comet.height/2);}
+  public float getX(){return x-comet.width/2;}
+  public float getY(){return y-comet.height/2;}
+}
