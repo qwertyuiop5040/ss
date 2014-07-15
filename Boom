@@ -1,0 +1,22 @@
+public class Boom{
+  private PImage explosion;
+  private float x,y;
+  private int frames;
+  public Boom(){
+    explosion=loadImage("boom.png");
+    x=0;
+    y=0;
+  }
+  public void draw(){
+    if(frames<=0)return;
+    frames--;
+    image(explosion,x,y);  
+    //print("hi"+x+" "+y);
+  }
+  
+  public void setExplosion(float x,float y){
+    frames=25;
+    this.x=x;
+    this.y=y;
+  }
+}
