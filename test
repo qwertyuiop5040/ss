@@ -1,0 +1,63 @@
+StarField sf;
+Comet comet;
+Ship ship;
+Boom boom;
+long lastShot;
+boolean shooting;
+ArrayList<Torpedo> torpedos=new ArrayList<Torpedo>();
+TorpedoField tf;
+void setup(){
+  size(640,480,P2D);
+  lastShot=System.currentTimeMillis();
+  sf=new StarField();
+  comet=new Comet();
+  ship=new Ship();
+  boom=new Boom();
+  tf=new TorpedoField();
+  shooting=false;
+  smooth();
+  noStroke();
+  frameRate(25);
+}
+void draw(){
+  background(0xFF000000);
+  checkCollisions();
+  sf.draw();
+  comet.draw();
+  ship.draw();
+  boom.draw();
+  tf.draw();
+}
+void fireShot(){
+  if(shooting&&System.currentTimeMillis()-Torpedo.DELAY>=lastShot){
+    lastShot=System.currentTimeMillis();
+    ship.fire(tf.getTorpedos());
+  }
+}
+void checkCollisions(){
+  if(ship==null||comet==null)return;
+  if(ship.getRect().intersects(comet.getRect())){
+    boom.setExplosion(comet.getX(),comet.getY());
+    comet=new Comet();
+    ship.hitComet();
+  }
+  for(int i=0;i<tf.getTorpedos().size();i++){
+      Torpedo torp=tf.getTorpedos().get(i);
+      if(torp.getRect().intersects(comet.getRect())){
+        boom.setExplosion(comet.getX(),comet.getY());
+        comet=new Comet();
+        tf.getTorpedos().remove(i--);
+      }
+  }
+  
+}
+@Override
+void keyPressed(){
+  ship.keyPressed();
+  if(!shooting)shooting=key==' ';
+}
+@Override
+void keyReleased(){
+  ship.keyReleased();
+  if(shooting)shooting=key!=' ';
+}
