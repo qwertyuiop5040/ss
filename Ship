@@ -1,0 +1,76 @@
+public class Ship implements BoxObject{
+  public static final float MAX_HEALTH=1000.0f;
+  private float x,y;
+  private PImage ship;
+  private float health=MAX_HEALTH;
+  private PImage slurm;
+  private boolean leftPressed=false,rightPressed=false,upPressed=false,downPressed=false;
+  public Ship(){
+    ship=loadImage("assets/ship.png");
+    ship.resize(0,80);
+    slurm=loadImage("assets/slurm3.png");
+    slurm.resize(50,0);
+    x=width/10;
+    y=height/2-ship.height/2;
+  }
+  public void draw(){
+    image(ship,x,y);
+    if(health>500.0f)fill(min(255,(MAX_HEALTH-health)*2.0f/MAX_HEALTH*256),255,0);
+    else fill(255,min(255,health*2.0f/MAX_HEALTH*256),0);
+    rect(400,400,200.0f*health/MAX_HEALTH,25);
+    image(slurm,380-slurm.width,410-slurm.height/2);
+    fireShot();
+    //fill(0xCC00FF00);
+    //rect(x,y,ship.width,ship.height);
+    updateKeyMovements();
+  }
+  public void updateKeyMovements(){
+    if(upPressed)
+       if((y-=5)<0.0)y=0.0;
+    if(downPressed)
+       if((y+=5)>height-ship.height)y=height-ship.height;
+    if(leftPressed)   
+       if((x-=5)<0.0)x=0.0;
+    if(rightPressed)   
+       if((x+=5)>width-ship.width)x=width-ship.width;
+  }
+  public void keyPressed(){
+    if(!keyPressed||key!=CODED)return;
+     switch(keyCode){
+        case UP:
+          if(!upPressed)upPressed=true;
+          break;
+        case DOWN:
+          if(!downPressed)downPressed=true;
+          break;
+        case LEFT:
+          if(!leftPressed)leftPressed=true;
+          break;
+        case RIGHT:
+         if(!rightPressed) rightPressed=true;
+          break;
+      }
+  }
+  public void keyReleased(){
+    if(key!=CODED)return;
+    switch((char)keyCode){
+        case UP:
+          if(upPressed)upPressed=false;
+          break;
+        case DOWN:
+          if(downPressed)downPressed=false;
+          break;
+        case LEFT:
+         if(leftPressed) leftPressed=false;
+          break;
+        case RIGHT:
+          if(rightPressed)rightPressed=false;
+          break;
+      }
+  }
+  public void fire(ArrayList<Torpedo> torpedos){torpedos.add(new Torpedo(x+ship.width,y+ship.height/2));}
+  public void hitComet(){health-=50;}
+  @Override
+  public Rect getRect(){return new Rect(x,y,x+ship.width,y+ship.height);}
+  
+}
