@@ -1,0 +1,33 @@
+public class TorpedoField{
+  ArrayList<Torpedo> torpedos=new ArrayList<Torpedo>();
+  private PImage torpedo;
+  public TorpedoField(){
+    torpedo=makeTexture(20);
+  }
+  public void draw(){
+    for(int i=0;i<torpedos.size();i++){
+      if(torpedos.get(i).outsideScreen()){
+        torpedos.remove(i--);
+      }
+    }
+    for(Torpedo t:torpedos){
+      t.incrementX();
+      image(torpedo,t.getX(),t.getY()-torpedo.height/2);
+    }
+  }
+  private PGraphics makeTexture(int r){
+    PGraphics res=createGraphics(r*6,r*6,P2D);
+    res.beginDraw();
+    res.loadPixels();
+    for ( int x = 0; x < res.width; x++) {
+      for( int y = 0; y < res.height; y++ ) {
+      float d = min( 512, 50* sq( r / sqrt( sq( x - 3 * r) + sq( y - 3 * r))));
+      res.pixels[y * res.width + x] = color( min(255,d), min(255, d*0.8), d);
+      }
+    }
+    res.updatePixels();
+    res.endDraw();
+    return res;
+  }
+  public ArrayList<Torpedo> getTorpedos(){return torpedos;}
+}
